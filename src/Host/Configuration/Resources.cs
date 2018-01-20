@@ -1,4 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
+// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
@@ -29,16 +29,26 @@ namespace Host.Configuration
             return new[]
             {
                 // simple version with ctor
-                new ApiResource("api1", "Some API 1")
+                new ApiResource("verifycode", "房源核验")
                 {
                     // this is needed for introspection when using reference tokens
-                    ApiSecrets = { new Secret("secret".Sha256()) }
+                    ApiSecrets = { new Secret("secret".Sha256()) },
+
+                    Scopes =
+                    {
+                        new Scope
+                        {
+                            Name = "verifycode.check",
+                            DisplayName = "房源核验确定"
+                        }
+                    }
                 },
                 
                 // expanded version if more control is needed
                 new ApiResource
                 {
-                    Name = "api2",
+                    Name = "contract",
+                    DisplayName = "合同查询",
 
                     ApiSecrets =
                     {
@@ -55,21 +65,21 @@ namespace Host.Configuration
                     {
                         new Scope
                         {
-                            Name = "api2.full_access",
-                            DisplayName = "Full access to API 2"
+                            Name = "contract.check",
+                            DisplayName = "合同查询"
                         },
                         new Scope
                         {
-                            Name = "api2.read_only",
-                            DisplayName = "Read only access to API 2"
+                            Name = "contract.bind",
+                            DisplayName = "合同绑定"
                         },
                         new Scope
                         {
-                            Name = "api2.internal",
+                            Name = "contract.send",
                             ShowInDiscoveryDocument = false,
                             UserClaims =
                             {
-                                "internal_id"
+                                "contract_no"
                             }
                         }
                     }
